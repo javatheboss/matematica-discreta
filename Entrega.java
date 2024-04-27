@@ -69,34 +69,99 @@ class Entrega {
      * la proposició (...((p1 -> p2) -> p3) -> ...) -> pn és certa?
      *
      * Vegeu el mètode Tema1.tests() per exemples.
-     */
+     *
+    }*/
+
     static int exercici1(int n) {
-        if (n == 1) {
-            return 2; // p1 puede ser verdadero o falso
-        } else {
-            return (int) Math.pow(2, n - 1); // para n > 1, la mitad de las asignaciones de verdad hacen que la proposición sea verdadera
-        }
+      int contador = 0;
+      int numCombinations = (int) Math.pow(2, n);
+
+      for (int i = 0; i < numCombinations; i++) {
+          boolean resultado = true;
+          for (int j = 0; j < n; j++) {
+              boolean verdadero = (i & (1 << j)) != 0;
+              resultado = (!resultado || verdadero);
+          }
+          if (resultado) {
+              contador++;
+          }
+      }
+      return contador;
     }
+
     /*
-     * És cert que ∀x : P(x) -> ∃!y : Q(x,y) ?
+     * És cert que ∀x : P(x) ->∃!y : Q(x,y) ?
      */
     static boolean exercici2(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) {
-      return false; // TODO
+      for (int x : universe) {
+        if (p.test(x)) {
+          int count = 0;
+          for (int y : universe) {
+            if (q.test(x, y)) {
+              count++;
+              if (count > 1) {
+                return false;
+              }
+            }
+          }
+          if (count == 0) {
+            return false;
+          }
+        }
+      }
+      return true;
     }
 
     /*
      * És cert que ∃x : ∀y : Q(x, y) -> P(x) ?
      */
     static boolean exercici3(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) {
-      return false; // TODO
+      for (int x : universe) {
+        boolean allY = true;
+        for (int y : universe) {
+          if (q.test(x, y) && !p.test(x)) {
+            allY = false;
+            break;
+          }
+        }
+        if (allY) {
+          return true;
+        }
+      }
+      return false;
     }
 
     /*
      * És cert que ∃x : ∃!y : ∀z : P(x,z) <-> Q(y,z) ?
      */
     static boolean exercici4(int[] universe, BiPredicate<Integer, Integer> p, BiPredicate<Integer, Integer> q) {
-      return false; // TODO
+      return false;
     }
+
+    static boolean exercici4(int[] universe, BiPredicate<Integer, Integer> p, BiPredicate<Integer, Integer> q) {
+    for (int x : universe) {
+        int countY = 0;
+        for (int y : universe) {
+            boolean allZ = true;
+            for (int z : universe) {
+                if (p.test(x, z) != q.test(y, z)) {
+                    allZ = false;
+                    break;
+                }
+            }
+            if (allZ) {
+                countY++;
+                if (countY > 1) {
+                    return false;
+                }
+            }
+        }
+        if (countY == 1) {
+            return true;
+        }
+    }
+    return false;
+}
 
     /*
      * Aquí teniu alguns exemples i proves relacionades amb aquests exercicis (vegeu `main`)
@@ -111,6 +176,7 @@ class Entrega {
       // 1  0
       // 1  1  <-
       assertThat(exercici1(2) == 3);
+      System.out.println("Pasa el ejercicio1-1");
 
       // (p1 -> p2) -> p3 és cert exactament a 5 files
       // p1 p2 p3
@@ -123,6 +189,7 @@ class Entrega {
       // 1  1  0
       // 1  1  1  <-
       assertThat(exercici1(3) == 5);
+      System.out.println("Pasa el ejercicio1-2");
 
       // Exercici 2
       // ∀x : P(x) -> ∃!y : Q(x,y)
@@ -133,6 +200,7 @@ class Entrega {
             (x, y) -> x+y >= 5
           )
       );
+      System.out.println("Pasa el ejercicio2-1");
 
       assertThat(
           !exercici2(
@@ -141,6 +209,7 @@ class Entrega {
             (x, y) -> x-y > 0
           )
       );
+      System.out.println("Pasa el ejercicio2-2");
 
       // Exercici 3
       // És cert que ∃x : ∀y : Q(x, y) -> P(x) ?
@@ -151,6 +220,7 @@ class Entrega {
             (x, y) -> y % x == 0
           )
       );
+      System.out.println("Pasa el ejercicio3-1");
 
       assertThat(
           exercici3(
@@ -159,6 +229,7 @@ class Entrega {
             (x, y) -> (x*y) % 4 != 0
           )
       );
+      System.out.println("Pasa el ejercicio3-2");
 
       // Exercici 4
       // És cert que ∃x : ∃!y : ∀z : P(x,z) <-> Q(y,z) ?
@@ -169,6 +240,7 @@ class Entrega {
             (y, z) -> y*z == 2
           )
       );
+      System.out.println("Pasa el ejercicio4-1");
 
       assertThat(
           !exercici4(
@@ -177,6 +249,7 @@ class Entrega {
             (y, z) -> y*z == 2
           )
       );
+        System.out.println("Pasa el ejercicio4-2");
     }
   }
 
