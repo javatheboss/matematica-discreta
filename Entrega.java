@@ -71,9 +71,12 @@ class Entrega {
      * Vegeu el mètode Tema1.tests() per exemples.
      */
     static int exercici1(int n) {
-      return 0; // TODO
+        if (n == 1) {
+            return 2; // p1 puede ser verdadero o falso
+        } else {
+            return (int) Math.pow(2, n - 1); // para n > 1, la mitad de las asignaciones de verdad hacen que la proposición sea verdadera
+        }
     }
-
     /*
      * És cert que ∀x : P(x) -> ∃!y : Q(x,y) ?
      */
