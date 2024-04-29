@@ -136,32 +136,29 @@ class Entrega {
      */
     static boolean exercici4(int[] universe, BiPredicate<Integer, Integer> p, BiPredicate<Integer, Integer> q) {
       return false;
+    }*/
+    static boolean exercici4(int[] universe, BiPredicate<Integer, Integer> p, BiPredicate<Integer, Integer> q) {
+        for (int x : universe) {
+            int countY = 0;
+            for (int y : universe) {
+                boolean allZ = true;
+                for (int z : universe) {
+                    if (p.test(x, z) != q.test(y, z)) {
+                        allZ = false;
+                        break;
+                    }
+                }
+                if (allZ) {
+                    countY++;
+                }
+            }
+            if (countY == 1) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    static boolean exercici4(int[] universe, BiPredicate<Integer, Integer> p, BiPredicate<Integer, Integer> q) {
-    for (int x : universe) {
-        int countY = 0;
-        for (int y : universe) {
-            boolean allZ = true;
-            for (int z : universe) {
-                if (p.test(x, z) != q.test(y, z)) {
-                    allZ = false;
-                    break;
-                }
-            }
-            if (allZ) {
-                countY++;
-                if (countY > 1) {
-                    return false;
-                }
-            }
-        }
-        if (countY == 1) {
-            return true;
-        }
-    }
-    return false;
-}
 
     /*
      * Aquí teniu alguns exemples i proves relacionades amb aquests exercicis (vegeu `main`)
@@ -231,24 +228,24 @@ class Entrega {
       );
       System.out.println("Pasa el ejercicio3-2");
 
-      // Exercici 4
-      // És cert que ∃x : ∃!y : ∀z : P(x,z) <-> Q(y,z) ?
-      assertThat(
-          exercici4(
-            new int[] { 0, 1, 2, 3, 4, 5 },
-            (x, z) -> x*z == 1,
-            (y, z) -> y*z == 2
-          )
-      );
-      System.out.println("Pasa el ejercicio4-1");
+        // Exercici 4
+        // És cert que ∃x : ∃!y : ∀z : P(x,z) <-> Q(y,z) ?
+        assertThat(
+                exercici4(
+                        new int[] { 0, 1, 2, 3, 4, 5 },
+                        (x, z) -> x*z == 1,
+                        (y, z) -> y*z == 2
+                )
+        );
+        System.out.println("Pasa el ejercicio4-1");
 
-      assertThat(
-          !exercici4(
-            new int[] { 1, 2, 3, 4, 5 },
-            (x, z) -> x*z == 1,
-            (y, z) -> y*z == 2
-          )
-      );
+        assertThat(
+                !exercici4(
+                        new int[] { 2, 3, 4, 5 },
+                        (x, z) -> x*z == 1,
+                        (y, z) -> y*z == 2
+                )
+        );
         System.out.println("Pasa el ejercicio4-2");
     }
   }
